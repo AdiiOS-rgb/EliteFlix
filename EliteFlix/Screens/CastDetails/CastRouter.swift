@@ -10,6 +10,7 @@ import UIKit
 protocol CastDetailsPresenterToRouterProtocol { }
 
 class CastDetailsRouter: CastDetailsPresenterToRouterProtocol {
+    
     static func build(type: String? = nil, castId: Int? = nil) -> UIViewController {
         let router: CastDetailsPresenterToRouterProtocol = CastDetailsRouter()
         var presenter: CastDetailsPresenterProtocol & CastDetailsViewToPresenterProtocol & CastDetailsInteractorToPresenterProtocol = CastDetailsPresenter(type: type, castId: castId, router: router)

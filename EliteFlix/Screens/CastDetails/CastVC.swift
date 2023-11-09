@@ -13,7 +13,8 @@ protocol CastDetailsPresenterToViewProtocol: AnyObject {
     func onFetchPersonDetailsSuccess(data: PersonDetails)
     func onFetchPersonPhotosSuccess(data: [CustomCollectionViewModel])
     func onFetchKnownForSuccess(data: [CustomCollectionViewModel])
-    func onFetchError(error: DataError)
+//    func onFetchError(error: DataError)
+    func onFetchKnownForError(error: RepoError)
 }
 
 class CastDetailsViewController: UIViewController, CastDetailsPresenterToViewProtocol {
@@ -183,7 +184,23 @@ class CastDetailsViewController: UIViewController, CastDetailsPresenterToViewPro
         knownForCollectionView.configure(data: data)
     }
     
-    func onFetchError(error: DataError) {
-        print(error.localizedDescription)
+//    func onFetchError(error: DataError) {
+//        print(error.localizedDescription)
+//    }
+    func onFetchKnownForError(error: RepoError) {
+        DispatchQueue.main.async { [weak self] in
+            self?.showAlert(title: Constants.Error, message: error.localizedDescription)
+        }
+    }
+}
+
+extension UIViewController {
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+            self?.dismiss(animated: true)
+        })
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
 }

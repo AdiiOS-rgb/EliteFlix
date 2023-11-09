@@ -175,5 +175,3 @@ extension CustomLabels: DetailViewProtocol {
         descriptionLabel.text = data.description
     }
 }
-
-

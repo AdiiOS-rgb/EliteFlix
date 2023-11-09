@@ -18,7 +18,8 @@ protocol CastDetailsInteractorToPresenterProtocol: AnyObject {
     var interactor: CastDetailsPresenterToInteractorProtocol? { get set }
     func onFetchCastDetailsSuccess<T: Codable>(data: T)
     func onFetchKnownForSuccess(data: MovieAppKnownFor)
-    func onFetchError(error: DataError)
+//    func onFetchError(error: DataError)
+    func onFetchKnownForError(error: RepoError)
 }
 
 protocol CastDetailsPresenterProtocol {
@@ -28,10 +29,11 @@ protocol CastDetailsPresenterProtocol {
 class CastDetailsPresenter: CastDetailsPresenterProtocol, CastDetailsViewToPresenterProtocol, CastDetailsInteractorToPresenterProtocol {
     var castId: Int?
     var type: String?
-    private var personDetails: PersonDetails?
-    private var personImages: PersonImages?
-    private var knownForMovie: MovieAppKnownFor?
-    private var knownForTvShows: MovieAppKnownFor?
+    private(set) var personDetails: PersonDetails?
+    private(set) var personImages: PersonImages?
+    private(set) var knownForMovie: MovieAppKnownFor?
+    private(set) var knownForTvShows: MovieAppKnownFor?
+    private(set) var error: RepoError?
     
     var interactor: CastDetailsPresenterToInteractorProtocol?
     weak var viewController: CastDetailsPresenterToViewProtocol?
@@ -62,6 +64,7 @@ class CastDetailsPresenter: CastDetailsPresenterProtocol, CastDetailsViewToPrese
         switch data {
             case is PersonDetails:
                 guard let data = data as? PersonDetails else { return }
+                self.personDetails = data
                 viewController?.onFetchPersonDetailsSuccess(data: data)
             case is PersonImages:
                 guard let data = data as? PersonImages else { return }
@@ -74,10 +77,16 @@ class CastDetailsPresenter: CastDetailsPresenterProtocol, CastDetailsViewToPrese
     
     func onFetchKnownForSuccess(data: MovieAppKnownFor) {
         let result = data.cast?.compactMap({ CustomCollectionViewModel(posterPath: $0.posterPath ?? "", title: $0.originalName ?? "") }) ?? []
+        self.knownForTvShows = data
         viewController?.onFetchKnownForSuccess(data: result)
     }
     
-    func onFetchError(error: DataError) {
-        viewController?.onFetchError(error: error)
+//    func onFetchError(error: DataError) {
+//        self.error = error
+//        viewController?.onFetchError(error: error)
+//    }
+    func onFetchKnownForError(error: RepoError) {
+        self.error = error
+        viewController?.onFetchKnownForError(error: error)
     }
 }

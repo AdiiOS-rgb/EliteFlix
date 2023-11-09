@@ -7,7 +7,13 @@
 
 import Foundation
 
-class TVShowsRepository {
+protocol ITvShowRepo { // for test
+    func getTVDetails<T: Codable>(modelType: T.Type, page: Int, _completation: @escaping (Result<T, RepoError>) -> Void)
+    func getDetails<T: Codable>(modelType: T.Type, id: Int, _completation: @escaping (Result<T, RepoError>) -> Void)
+    func getGenre<T: Codable>(modelType: T.Type, _completation: @escaping (Result<T, RepoError>) -> Void)
+}
+
+class TVShowsRepository: ITvShowRepo {
     func getTVDetails<T: Codable>( modelType: T.Type, page: Int = 1, _completation: @escaping (Result<T, RepoError>) -> Void) {
         
         var apiEndPoint: TVShowApiEndPoint? {
@@ -33,7 +39,7 @@ class TVShowsRepository {
         }
     }
     
-    func getDetails<T: Codable>(modelType: T.Type, id: Int, completion: @escaping (Result<T, RepoError>) -> Void) {
+    func getDetails<T: Codable>(modelType: T.Type, id: Int, _completation completion: @escaping (Result<T, RepoError>) -> Void) {
         var apiEndPoints: TVShowApiEndPoint? {
             switch modelType {
             case is MovieAppDetails.Type: return .tVShowDetails(id: id)
@@ -56,7 +62,7 @@ class TVShowsRepository {
         }
     }
     
-    func getGenre<T: Codable>(modelType: T.Type, completion: @escaping (Result<T, DataError>) -> Void) {
+    func getGenre<T: Codable>(modelType: T.Type, _completation completion: @escaping (Result<T, RepoError>) -> Void) {
         APIManager.shared.request(modelType: modelType, type: TVShowApiEndPoint.genereList) { respoonseData in
             switch respoonseData {
                 case .success(let response):
@@ -70,7 +76,7 @@ class TVShowsRepository {
     
 }
 
-enum RepoError:  Error {
+enum RepoError: Error {
     case serverError 
     case badUrl
     case invalidResponse

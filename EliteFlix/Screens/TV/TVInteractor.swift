@@ -10,27 +10,25 @@ import UIKit
 
 protocol TvInteractorProtocol {
     var presenter: TVPresenterProtocol? {get set}
-    var repository: TVShowsRepository? {get set}
     var popularTvShowList: PopularTVShowsList? {get set}
-    
     func getTopRatedMovies()
     
 //    func convertToCustomModal(list: PopularTVShowsList) -> [CustomModal]
 }
 
 class TVInteractor: TvInteractorProtocol {
-    var repository: TVShowsRepository?
+    var repository: ITvShowRepo?
     var popularTvShowList: PopularTVShowsList?
     var presenter: TVPresenterProtocol?
     
-    init(repository: TVShowsRepository? = TVShowsRepository(), popularTvShowList: PopularTVShowsList? = nil, presenter: TVPresenterProtocol? = nil) {
+    init(repository: ITvShowRepo? = TVShowsRepository(), popularTvShowList: PopularTVShowsList? = nil, presenter: TVPresenterProtocol? = nil) {
         self.repository = repository
         self.popularTvShowList = popularTvShowList
         self.presenter = presenter
     }
     
     func getTopRatedMovies() {
-        repository?.getTVDetails(modelType: PopularTVShowsList.self) { result in
+        repository?.getTVDetails(modelType: PopularTVShowsList.self, page: 1) { result in
             switch result {
             case .success(let data):
                 self.popularTvShowList = data

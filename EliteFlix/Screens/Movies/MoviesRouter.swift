@@ -8,35 +8,47 @@
 import Foundation
 import UIKit
 
-protocol MovieRouterProtocol {
+protocol MoviesPresenterToRouterProtocol {
     var viewController: UINavigationController? { get set }
     func navigateToMovieDetails(movieId: Int?)
 }
 
-class MoviesRouter: MovieRouterProtocol {
+class MoviesRouter: MoviesPresenterToRouterProtocol {
     var movieDetailsViewController: UIViewController?
     var viewController: UINavigationController?
-    
+
     static func createModule() -> UINavigationController {
-        let viewController = MoviesViewController()
-        
-        let router: MovieRouterProtocol = MoviesRouter()
-        let interactor: MovieInteractorProtocol = MoviesInteractor()
-        let presenter: MoviePresenterProtocol = MoviesPresenter(view: viewController, interactor: interactor, router: router)
-        
-        viewController.presenter = presenter as? MoviesPresenter
-        viewController.presenter?.router = router
-        viewController.presenter?.interactor = interactor
-        viewController.presenter?.interactor?.presenter = presenter
-        
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.navigationItem.title = "Movies"
-        navigationController.navigationBar.prefersLargeTitles = true
-        viewController.presenter?.router?.viewController = navigationController
-        
-        return navigationController
+        var router: MoviesPresenterToRouterProtocol = MoviesRouter()
+        var presenter: MoviesPresenterProtocol & MoviesViewToPresenterProtocol & MoviesInteractorToPresenterProtocol = MoviesPresenter(router: router)
+        let interactor = MoviesInteractor(presenter: presenter)
+        let viewController = MoviesViewController(presenter: presenter)
+        presenter.viewController = viewController
+        presenter.interactor = interactor
+        let navigationBarViewController = UINavigationController(rootViewController: viewController)
+        router.viewController = navigationBarViewController
+        return navigationBarViewController
     }
     
+//    static func createModule() -> UINavigationController {
+//        let viewController = MoviesViewController()
+//        
+//        let router: MovieRouterProtocol = MoviesRouter()
+//        let interactor: MovieInteractorProtocol = MoviesInteractor()
+//        let presenter: MoviePresenterProtocol = MoviesPresenter(view: viewController, interactor: interactor, router: router)
+//        
+//        viewController.presenter = presenter as? MoviesPresenter
+//        viewController.presenter?.router = router
+//        viewController.presenter?.interactor = interactor
+//        viewController.presenter?.interactor?.presenter = presenter
+//        
+//        let navigationController = UINavigationController(rootViewController: viewController)
+//        navigationController.navigationItem.title = "Movies"
+//        navigationController.navigationBar.prefersLargeTitles = true
+//        viewController.presenter?.router?.viewController = navigationController
+//        
+//        return navigationController
+//    }
+//    
     func navigateToMovieDetails(movieId: Int?) {
 //     print(movieId)
         guard let viewController = viewController else { return }

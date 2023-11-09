@@ -62,7 +62,7 @@ class HomeViewController: UIViewController, HomePresenterToViewProtocol {
         tableView.dataSource = self
     }
     
-    func configureTableHeaderView(data: HomeHeaderViewData) {
+    func configureTableHeaderView(data: HomeHeaderViewData) { // hearder of table view
         DispatchQueue.main.async { [weak self] in
             guard let headerView = self?.tableView.tableHeaderView as? HomeTableHeaderView else { return }
             headerView.configure(data: data)
@@ -70,7 +70,7 @@ class HomeViewController: UIViewController, HomePresenterToViewProtocol {
         }
     }
     
-    func onFetchMoviesSuccess() {
+    func onFetchMoviesSuccess() { // View Data
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
             self?.tableView.layoutIfNeeded()
@@ -100,8 +100,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// extension HomeViewController: HomeTableViewSectionHeaderViewToViewProtocol {
-//    func navigateToMovie(type: String) {
-//        presenter.navigateToMovies(type: type)
-//    }
-// }
+ extension HomeViewController: HomeTableViewSectionHeaderViewToViewProtocol {
+    func navigateToMovie(type: String) { // Navigating View TO Movies
+        presenter.navigateToMovies(type: type)
+    }
+ }

@@ -133,6 +133,7 @@ struct Constants {
     static let youtubeBasePath = "https://www.youtube.com/embed/"
     static let AuthorizationToken: [(String, String)] = [("Authorization", readAccessToken), ("Content-Type", "application/json")]
     static let StatusCode = 200
+    static let Error = "API Error"
 }
 
 struct MovieT {

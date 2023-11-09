@@ -13,6 +13,7 @@ import UIKit
 
 protocol HomePresenterToRouterProtocol {
     var viewController: UIViewController? { get set }
+    func navigateToMovie(isNavigate: Bool, data: MovieAppEntity)
 }
 
 class HomeRouter: HomePresenterToRouterProtocol {
@@ -29,56 +30,22 @@ class HomeRouter: HomePresenterToRouterProtocol {
         router.viewController = viewController
         return viewController
     }
-//    func navigateToMovie(isNavigate: Bool = false, data: MovieAppEntity) {
-//        if isNavigate {
-//            viewController?.tabBarController?.selectedIndex = 1
-//        }
-//        guard let movieViewController = movieViewController else {
-//            DispatchQueue.main.async { [weak self] in
-//                let movieViewController = self?.viewController?.tabBarController?.viewControllers?[1] as? UINavigationController
-//                self?.movieViewController = movieViewController
-//                let movieViewControllerProtocol = movieViewController?.visibleViewController as? MovieViewProtocol
-//                movieViewControllerProtocol?.presenter?.configureMovie(movieEntity: data)
-//            }
-//            return
-//        }
-//        let movieViewControllerProtocol = movieViewController.visibleViewController as? MovieViewProtocol
-//        movieViewControllerProtocol?.presenter?.configureMovie(movieEntity: data)
-//    }
+    
+    func navigateToMovie(isNavigate: Bool = false, data: MovieAppEntity) {
+        if isNavigate {
+            viewController?.tabBarController?.selectedIndex = 1
+        }
+        guard let movieViewController = movieViewController else {
+            DispatchQueue.main.async { [weak self] in
+                let movieViewController = self?.viewController?.tabBarController?.viewControllers?[1] as? UINavigationController
+                self?.movieViewController = movieViewController
+                let movieViewControllerProtocol = movieViewController?.visibleViewController as? MoviesPresenterToViewProtocol
+                movieViewControllerProtocol?.presenter.configureMovie(movieEntity: data)
+            }
+            return
+        }
+        let movieViewControllerProtocol = movieViewController.visibleViewController as? MoviesPresenterToViewProtocol
+        movieViewControllerProtocol?.presenter.configureMovie(movieEntity: data)
+    }
     
 }
-// class HomeRouter: HomeRouterProtocol {
-//    var movieViewController: UINavigationController?
-//    static func createModule() -> UINavigationController {
-//        let viewController = HomeViewController()
-//        let navigationController = UINavigationController(rootViewController: viewController)
-//        
-//        let router: HomeRouterProtocol = HomeRouter()
-//        let interactor: HomeInteractorProtocol = HomeInteractor()
-//        let presenter: HomePresenterProtocol = HomePresenter(view: viewController, router: router, interactor: interactor)
-//        
-//        viewController.presenter = presenter as? HomePresenter
-//        viewController.presenter?.router = router
-//        viewController.presenter?.interactor = interactor
-//        viewController.presenter?.interactor?.presenter = presenter
-//        
-//    
-//        return navigationController
-//    }
-    
-//    func switchToMovieModule(type: String, data: [ListObj]) {
-//        
-//        guard let movieViewController = movieViewController else {
-//              DispatchQueue.main.async { [weak self] in
-//                let movieViewController = self?.viewController?.tabBarController?.viewControllers?[1]
-//                                          as? UINavigationController
-//                self?.movieViewController = movieViewController
-//                let movieViewInterFace = movieViewController?.visibleViewController as? MovieViewInterface
-//                  movieViewInterFace?.presenter?.configerMovies(type: type, data: data)
-//              }
-//              return
-//            }
-//        let movieViewInterFace = movieViewController.visibleViewController as? HomeViewProtocol
-//        movieViewInterFace?.presenter?.configerMovies(type: type, data: data)
-//        viewController?.tabBarController?.selectedIndex = 1
-//    }

@@ -32,6 +32,7 @@ class MovieDetailsRouter: MovieDetailsRouterProtocol {
     
         return viewController
     }
+    
     func navigateToCastDetails(castId: Int) {
         guard let viewController = viewController else { return }
         guard let castDetailsViewController = castDetailsViewController else {

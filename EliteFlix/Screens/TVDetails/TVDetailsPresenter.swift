@@ -23,9 +23,13 @@ class TVDetailsPresenter: TVDetailsPresenterProtocol {
     var interactor: TVDetailsInteractorProtocol?
     var router: TVDetailsRouterProtocol?
     var tvShowsId: Int?
-    private var tvShowsDetails: MovieAppDetails?
-    private var tvShowsCast: MovieAppCast?
-    private var tvShowsVideos: MovieAppVideo?
+//    private var tvShowsDetails: MovieAppDetails?
+//    private var tvShowsCast: MovieAppCast?
+//    private var tvShowsVideos: MovieAppVideo?
+    private(set) var tvShowsDetails: MovieAppDetails?
+    private(set) var tvShowsVideo: MovieAppVideo?
+    private(set) var tvShowsCast: MovieAppCast?
+    private(set) var error: DataError?
     
     init(view: TVDetailsViewProtocol? = nil, interactor: TVDetailsInteractorProtocol? = nil, router: TVDetailsRouterProtocol?, tvShowsId: Int?) {
         self.view = view
@@ -56,7 +60,7 @@ class TVDetailsPresenter: TVDetailsPresenterProtocol {
                 view?.FetchedTVShowList(data: convertToDetailsEntity(data: data))
         case is MovieAppVideo:
             guard let data = data as? MovieAppVideo else { return }
-            tvShowsVideos = data
+            tvShowsVideo = data
             let response = data.results?.compactMap({ $0.key }) ?? []
             view?.onFetchTvShowsVideosSuccess(data: response)
         case is MovieAppCast:

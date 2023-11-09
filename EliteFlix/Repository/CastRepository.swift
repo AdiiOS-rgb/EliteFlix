@@ -4,9 +4,13 @@
 //
 //  Created by Adityakumar Ramnuj on 06/11/23.
 //
+protocol ICastRepository {
+    func getDetails<T: Codable>(modelType: T.Type, id: Int, _completation: @escaping (Result<T, RepoError>) -> Void)
+    func getKnownFor<T: Codable>(modelType: T.Type, id: Int, type: String, _completation: @escaping (Result<T, RepoError>) -> Void)
+}
 
 import Foundation
-class CastRepository {
+class CastRepository: ICastRepository {
     func getDetails<T: Codable>(modelType: T.Type, id: Int, _completation: @escaping (Result<T, RepoError>) -> Void) {
         var apiEndPoints: CastAPIEnpoints? {
             switch modelType {

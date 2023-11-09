@@ -8,80 +8,53 @@
 import Foundation
 import UIKit
 
-protocol MoviePresenterProtocol {
-    var view: MovieViewProtocol? {get set}
-    var interactor: MovieInteractorProtocol? {get set}
-    var router: MovieRouterProtocol? {get set}
+protocol MoviesViewToPresenterProtocol {
+    var viewController: MoviesPresenterToViewProtocol? { get set }
+    func navigateToMovieDetails(type: String?, indexPath: IndexPath)
     func viewDidLoad()
-    
-    func fetchedPopularMovies()
-    func navigateToMovieDetails(movieId: Int?)
-//    func configureMovie(movieEntity: MovieAppEntity)
-    
-    func numbersOfItemInSection(section: Int) -> Int
-    func ConfigCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    func configureMovie(movieEntity: MovieAppEntity)
 }
 
-class MoviesPresenter: MoviePresenterProtocol {
+protocol MoviesInteractorToPresenterProtocol {
+    var interactor: MoviesPresenterToInteractorProtocol? { get set }
+}
+
+protocol MoviesPresenterProtocol {
+    var router: MoviesPresenterToRouterProtocol { get set }
+}
+
+class MoviesPresenter: MoviesPresenterProtocol, MoviesViewToPresenterProtocol, MoviesInteractorToPresenterProtocol {
     private(set) var movieEntity: MovieAppEntity?
     
-    var view: MovieViewProtocol?
-    var interactor: MovieInteractorProtocol?
-    var router: MovieRouterProtocol?
+    var interactor: MoviesPresenterToInteractorProtocol?
+    weak var viewController: MoviesPresenterToViewProtocol?
+    var router: MoviesPresenterToRouterProtocol
     
-    private var popularMovie: PopularMovies?
-    init(view: MovieViewProtocol? = nil, interactor: MovieInteractorProtocol? = nil, router: MovieRouterProtocol? = nil) {
-        self.view = view
-        self.interactor = interactor
+    init(router: MoviesPresenterToRouterProtocol) {
         self.router = router
     }
     
-    func viewDidLoad() {
-        interactor?.getPopularMovies()
-    }
+    func viewDidLoad() {}
     
-//    func configureMovie(movieEntity: MovieAppEntity) {
-//        self.movieEntity = movieEntity
-//        switch movieEntity.type {
-//            case MovieT.Popular:
-//                view?.configure(title: "Popular", data: movieEntity.convertToMoviesCustomCollectionViewModel())
-//            case MovieT.TopRated:
-//            view?.configure(title: "Top Rated", data: movieEntity.convertToMoviesCustomCollectionViewModel())
-//            case MovieT.UpComing:
-//            view?.configure(title: "Up Coming", data: movieEntity.convertToMoviesCustomCollectionViewModel())
-//            case MovieT.NowPlaying:
-//            view?.configure(title: "Now Playing", data: movieEntity.convertToMoviesCustomCollectionViewModel())
-//            default: break
-//        }
-//    }
-    
-    func fetchedPopularMovies() {
-        popularMovie = interactor?.popularMovieList
-        view?.fetchedPopularMovie(List: popularMovie)
-    // send this to view pending
-    }
-    
-    func numbersOfItemInSection(section: Int) -> Int {
-        return popularMovie?.list?.count ?? 10
-    }
-    
-    func ConfigCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CVClassCell.Identifier, for: indexPath) as? CVClassCell else {
-            return UICollectionViewCell() }
-        
-        let title = popularMovie?.list?[indexPath.row].originalTitle ?? "MovieName"
-        let poster = popularMovie?.list?[indexPath.row].posterPath
-        
-        if let posterURL = poster {
-            let posterString = posterURL.absoluteString
-            cell.SetCVCell(title: title, posterPath: posterString)
-        } else {
-            cell.SetCVCell(title: title, posterPath: "")
+    func configureMovie(movieEntity: MovieAppEntity) {
+        self.movieEntity = movieEntity
+        switch movieEntity.type {
+            case MovieT.Popular:
+                viewController?.configure(title: "Popular", data: movieEntity.convertToMoviesCustomCollectionViewModel())
+            case MovieT.TopRated:
+                viewController?.configure(title: "Top Rated", data: movieEntity.convertToMoviesCustomCollectionViewModel())
+            case MovieT.UpComing:
+                viewController?.configure(title: "Up Coming", data: movieEntity.convertToMoviesCustomCollectionViewModel())
+            case MovieT.NowPlaying:
+                viewController?.configure(title: "Now Playing", data: movieEntity.convertToMoviesCustomCollectionViewModel())
+            default: break
         }
-        return cell
     }
-    
-    func navigateToMovieDetails(movieId: Int?) {
-        router?.navigateToMovieDetails(movieId: movieId)
+}
+
+extension MoviesPresenter {
+    func navigateToMovieDetails(type: String?, indexPath: IndexPath) {
+        guard let movieId = movieEntity?.data?.results?[indexPath.row].id else { return }
+        router.navigateToMovieDetails(movieId: movieId)
     }
 }

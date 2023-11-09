@@ -17,10 +17,7 @@ class TVRouter: TvRouterProtocol {
     var viewController: UINavigationController?
     var tvShowsDetailsViewController: UIViewController?
     var TVShowDetailsVC: UIViewController?
-//    weak var navigationController: UINavigationController?
-//    init(navigationController: UINavigationController) {
-//        self.navigationController = navigationController
-//    }
+
     
     static func createModule() -> UINavigationController {
         

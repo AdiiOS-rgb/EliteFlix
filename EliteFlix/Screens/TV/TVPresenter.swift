@@ -25,8 +25,9 @@ class TVPresenter: TVPresenterProtocol {
     var view: TVviewProtocol?
     var interactor: TvInteractorProtocol?
     var router: TvRouterProtocol?
+    private(set) var error: DataError?
     
-    private var popularTVShowsList: PopularTVShowsList?
+    private(set) var popularTVShowsList: PopularTVShowsList?
     
     init(view: TVviewProtocol? = nil, interactor: TvInteractorProtocol? = nil, router: TvRouterProtocol? = nil) {
         self.view = view

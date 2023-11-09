@@ -6,3 +6,7 @@
 //
 
 import Foundation
+struct CustomCollectionViewModel: Codable {
+    let posterPath: String
+    let title: String
+}

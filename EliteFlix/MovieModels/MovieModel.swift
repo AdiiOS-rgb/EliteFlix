@@ -52,16 +52,6 @@ struct MovieList: Codable {
         case totalResults = "total_results"
         case list = "results"
     }
-    
-//    func toListObj() -> [ListObj] {
-//        return self.list?.map({ movie in
-//            return ListObj(id: movie.id, title: movie.originalTitle,
-//                           posterPath: movie.posterPath, backdropPath: movie.backdropPath,
-//                           genre: movie.genre, voteAverage: movie.voteAvarage,
-//                           voteCount: movie.voteCount)
-//                           
-//        }) ?? []
-//    }
 }
 
 struct MovieListObj: Codable {
@@ -84,7 +74,7 @@ struct MovieListObj: Codable {
     }
 }
 
-struct PopularMovies: Codable {
+struct PopularMovies: Codable { // remove to moviemodal
     let page: Int?
     let totalPages: Int?
     let totalResults: Int?
@@ -96,11 +86,9 @@ struct PopularMovies: Codable {
         case totalResults = "total_results"
         case list = "results"
     }
-    
-    
 }
 
-struct TopRatedMovies: Codable {
+struct TopRatedMovies: Codable { // remove
     let page: Int?
     let totalPages: Int?
     let totalResults: Int?
@@ -145,13 +133,6 @@ struct NowPlayingMovies: Codable {
     }
     
 }
-
-//struct MovieGenreList: Codable {
-//    let genres: [Genre]
-//}
-
-
-
 struct Dates: Codable {
     let maximum, minimum: String?
 }
@@ -293,7 +274,7 @@ struct TVShowListObj: Codable {
     }
 }
 
-struct PopularTVShowsList: Codable { //remove
+struct PopularTVShowsList: Codable { // remove
     let page: Int?
     let totalPages: Int?
     let totalResults: Int?
@@ -328,20 +309,6 @@ struct TopRatedTVShowsList: Codable {
         
     }
 }
-
-// struct CustomModal {
-//    let title : String?
-//    let img: String?
-//    let parentModal: Any
-//    
-// }
-// let topRatedTVShowsList = TopRatedTVShowsList()
-
-//
-// let topRatedTVShowsList = PopularTVShowsList(page: 1, totalPages: 10, totalResults: 100, list: [TVShowListObj]())
-// let customModal = [CustomModal(title: "", img: "", parentModal: topRatedTVShowsList)]
-
-
 struct CustomObj: Codable {
     let id: Int?
     let title: String?

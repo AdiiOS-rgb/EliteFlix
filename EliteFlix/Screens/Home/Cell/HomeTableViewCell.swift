@@ -44,4 +44,3 @@ extension HomeTableViewCell {
         collectionView.configure(type: type, data: data)
     }
 }
-

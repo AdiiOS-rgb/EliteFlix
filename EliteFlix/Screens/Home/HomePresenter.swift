@@ -17,6 +17,7 @@ protocol HomeViewToPresenterProtocol {
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func viewForHeaderInSection(tableView: UITableView, section: Int) -> UIView?
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
+    func navigateToMovies(type: String)
 }
 
 protocol HomeInteractorToPresenterProtocol: AnyObject {
@@ -37,11 +38,7 @@ class HomePresenter: HomePresenterProtocol, HomeViewToPresenterProtocol, HomeInt
     var interactor: HomePresenterToInteractorProtocol?
     weak var viewController: HomePresenterToViewProtocol?
     var router: HomePresenterToRouterProtocol
-    
-//    private var filteredList: [MovieAppEntity] = []
-//    private var homeEntityList: [MovieAppEntity] = []
-//    private var homeGenreMapping: [HomeGenreMapping] = []
-    
+
     private(set) var homeEntityList: [MovieAppEntity] = []
     private(set) var filteredList: [MovieAppEntity] = []
     private(set) var homeGenreMappingList: [HomeGenreMapping] = []
@@ -92,14 +89,19 @@ class HomePresenter: HomePresenterProtocol, HomeViewToPresenterProtocol, HomeInt
         }
         return view
     }
+    
+    func navigateToMovies(type: String) {
+        guard let data = homeEntityList.first(where: { $0.type == type }) else { return }
+        router.navigateToMovie(isNavigate: true, data: data)
+    }
 }
 
 extension HomePresenter {
-    func onFetchMoviesSuccess(type: String, data: MovieAppModel) {
+    func onFetchMoviesSuccess(type: String, data: MovieAppModel) { // Movie Data 
         let record = MovieAppEntity(type: type, data: data)
         if type == MovieT.Popular {
             viewController?.configureTableHeaderView(data: convertToHomeHeaderViewData(data: data))
-//            router.navigateToMovie(isNavigate: false, data: record)  // showing details of movie
+            router.navigateToMovie(isNavigate: false, data: record)  // showing details of movie
         }
         homeEntityList.append(record)
         filteredList = homeEntityList

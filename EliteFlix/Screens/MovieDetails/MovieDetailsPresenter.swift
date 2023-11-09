@@ -30,9 +30,14 @@ class MovieDetailsPresenter: MovieDetailpresenterProtocol {
     var interactor: MovieDetailsInteractorProtocol?
     var router: MovieDetailsRouterProtocol?
     var Movieid: Int?
-    private var movieVidoes: MovieAppVideo?
-    private var movieDetails: MovieAppDetails?
-    private var movieCast: MovieAppCast?
+//    private var movieVidoes: MovieAppVideo?
+//    private var movieDetails: MovieAppDetails?
+//    private var movieCast: MovieAppCast?
+    
+    private(set) var movieDetails: MovieAppDetails?
+    private(set) var movieVideo: MovieAppVideo?
+    private(set) var movieCast: MovieAppCast?
+    private(set) var error: RepoError?
     
     init(view: MovieDetailViewProtocol? = nil, interactor: MovieDetailsInteractorProtocol? = nil, router: MovieDetailsRouterProtocol? = nil, Movieid: Int? = nil) {
         self.view = view
@@ -40,6 +45,10 @@ class MovieDetailsPresenter: MovieDetailpresenterProtocol {
         self.router = router
         self.Movieid = Movieid
     }
+//    init(router: MovieDetailsRouterProtocol? = nil, Movieid: Int? = nil) {
+//        self.router = router
+//        self.Movieid = Movieid
+//    }
     
     func viewDidLoad() {
         guard let Movieid = Movieid else {
@@ -65,7 +74,7 @@ class MovieDetailsPresenter: MovieDetailpresenterProtocol {
                 view?.fetchedMovieDetails(data: convertToDetailsEntity(data: data))
             case is MovieAppVideo:
                 guard let data = data as? MovieAppVideo else { return }
-                movieVidoes = data
+                movieVideo = data
                 let result = data.results?.compactMap({ $0.key }) ?? []
                 view?.fetchedYTVideo(data: result)
             

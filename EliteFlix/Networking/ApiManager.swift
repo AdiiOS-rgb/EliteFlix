@@ -16,6 +16,7 @@ enum DataError: Error {
     case serverError
     case encodeError(Error)
     case decodeError(Error)
+    case badUrl
 }
 
 final class APIManager {
@@ -45,8 +46,6 @@ final class APIManager {
         type.headers.forEach { (key, value) in
             urlRequest.addValue(value, forHTTPHeaderField: key)
         }
-        
-        
         if let requestBody = type.body {
             do {
                 let data = try JSONEncoder().encode(requestBody)

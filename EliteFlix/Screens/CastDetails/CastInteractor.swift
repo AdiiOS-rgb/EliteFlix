@@ -14,10 +14,10 @@ protocol CastDetailsPresenterToInteractorProtocol {
 }
 
 class CastDetailsInteractor: CastDetailsPresenterToInteractorProtocol {
-    private var castRepository: CastRepository
+    private var castRepository: ICastRepository
     weak var presenter: CastDetailsInteractorToPresenterProtocol?
     
-    init(castRepository: CastRepository = CastRepository(), presenter: CastDetailsInteractorToPresenterProtocol?) {
+    init(castRepository: ICastRepository = CastRepository(), presenter: CastDetailsInteractorToPresenterProtocol?) {
         self.castRepository = castRepository
         self.presenter = presenter
     }
@@ -39,7 +39,8 @@ class CastDetailsInteractor: CastDetailsPresenterToInteractorProtocol {
                 case .success(let data):
                     self?.presenter?.onFetchKnownForSuccess(data: data)
                 case .failure(let error):
-                debugPrint(error.localizedDescription)
+//                debugPrint(error.localizedDescription)
+                self?.presenter?.onFetchKnownForError(error: error)
             }
         }
     }

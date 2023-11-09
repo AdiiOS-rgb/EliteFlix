@@ -70,4 +70,3 @@ struct MovieAppRecord: Codable {
         case genres = "genre_ids"
     }
 }
-

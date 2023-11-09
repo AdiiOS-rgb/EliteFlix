@@ -9,15 +9,14 @@ import Foundation
 
 protocol TVDetailsInteractorProtocol {
     var presenter: TVDetailsPresenterProtocol? {get set}
-    var repository: TVShowsRepository? {get set}
     func fetchTvShowsDetails<T: Codable>(tvShowsId: Int, modelType: T.Type)
 }
 
 class TVDetailInteractor: TVDetailsInteractorProtocol {
-    var repository: TVShowsRepository?
+    var repository: ITvShowRepo?
     var presenter: TVDetailsPresenterProtocol?
     
-    init(repository: TVShowsRepository? = TVShowsRepository(), presenter: TVDetailsPresenterProtocol? = nil) {
+    init(repository: ITvShowRepo? = TVShowsRepository(), presenter: TVDetailsPresenterProtocol? = nil) {
         self.repository = repository
         self.presenter = presenter
     }

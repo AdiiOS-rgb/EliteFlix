@@ -31,18 +31,17 @@ final class HomeTests: XCTestCase {
         XCTAssertNil(error, "Error while executing HomeInteractor -> fetchMovies()")
     }
     
-    func testFetchMoviesFailure() {
+    func testFetchGenreSuccess() {
         let presenter = HomePresenter(router: HomeRouter())
         let interactor = HomeInteractor(movieRepository: MovieRepositoryMock(), presenter: presenter)
         presenter.interactor = interactor
-        interactor.fetchMovies(type: "Test")
+        interactor.fetchGenre()
         
-        let data = presenter.homeEntityList.first(where: { $0.type == "Test" })?.data
+        let data = presenter.homeGenreMappingList
         let error = presenter.error
         
-        XCTAssertNil(data, "Movie data is not nil while executing HomeInteractor -> fetchMovies()")
-//        XCTAssertNotNil(error, "Error is nil while executing HomeInteractor -> fetchMovies()")
+        XCTAssertNotNil(data, "Genre data is nil while executing HomeInteractor -> fetchGenre()")
+        XCTAssertGreaterThan(data.count, 0, "Genre list is empty  while executing HomeInteractor -> fetchMovies()")
+        XCTAssertNil(error, "Error while executing HomeInteractor -> fetchGenre()")
     }
-    
-//    func fetchGenerSuccess() {}
 }

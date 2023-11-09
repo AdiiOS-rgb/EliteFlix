@@ -22,8 +22,6 @@ class TvShowsViewController: UIViewController, TVviewProtocol {
         View.translatesAutoresizingMaskIntoConstraints = false
         return View
     }()
- 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -50,10 +48,5 @@ class TvShowsViewController: UIViewController, TVviewProtocol {
             self.customVC.collectionView.reloadData()
         }
     }
-//
-}
 
-struct CustomCollectionViewModel: Codable {
-    let posterPath: String
-    let title: String
 }

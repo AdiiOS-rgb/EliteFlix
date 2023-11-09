@@ -4,22 +4,20 @@
 //
 //  Created by Adityakumar Ramnuj on 05/11/23.
 //
-
 import Foundation
 import UIKit
 
 protocol MovieDetailsInteractorProtocol {
     var presenter: MovieDetailpresenterProtocol? {get set}
-    var repository: MovieRepository? {get set}
-    
+
     func fetchMovieDetails<T: Codable>(movieId: Int, modelType: T.Type)
 }
 
 class MovieDetailsInteractor: MovieDetailsInteractorProtocol {
     var presenter: MovieDetailpresenterProtocol?
-    var repository: MovieRepository?
+    var repository: IMovieAppRepository?
     
-    init(presenter: MovieDetailpresenterProtocol? = nil, repository: MovieRepository? = MovieRepository()) {
+    init(presenter: MovieDetailpresenterProtocol? = nil, repository: IMovieAppRepository? = MovieRepository()) {
         self.presenter = presenter
         self.repository = repository
     }

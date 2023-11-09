@@ -8,35 +8,14 @@
 import Foundation
 import UIKit
 
-protocol MovieInteractorProtocol {
-    var presenter: MoviePresenterProtocol? {get set}
-    var repository: MovieRepository? {get set}
-    var popularMovieList: PopularMovies? {get set}
-    
-    func getPopularMovies()
+protocol MoviesPresenterToInteractorProtocol {
+    var presenter: MoviesInteractorToPresenterProtocol? { get set }
 }
 
-class MoviesInteractor: MovieInteractorProtocol {
-    var repository: MovieRepository?
-    var popularMovieList: PopularMovies?
-    var presenter: MoviePresenterProtocol?
+class MoviesInteractor: MoviesPresenterToInteractorProtocol {
+     var presenter: MoviesInteractorToPresenterProtocol?
     
-    init(repository: MovieRepository? = MovieRepository(), popularMovieList: PopularMovies? = nil, presenter: MoviePresenterProtocol? = nil) {
-        self.repository = repository
-        self.popularMovieList = popularMovieList
+    init(presenter: MoviesInteractorToPresenterProtocol?) {
         self.presenter = presenter
     }
-    
-    func getPopularMovies() {
-        repository?.get(modelType: PopularMovies.self, _completation: { result in
-            switch result {
-            case .success(let data):
-                self.popularMovieList = data
-                self.presenter?.fetchedPopularMovies()
-            case .failure: break
-//                self.presenter?.onFetchPopularMovieListFailure()
-            }
-        })
-    }
-    
 }
